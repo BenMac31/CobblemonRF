@@ -3,21 +3,41 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    flake-parts.url = "github:hercules-ci/flake-parts";
+    systems.url = "github:nix-systems/default";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = nixpkgs.legacyPackages.${system};
-      in
-      {
+  outputs = inputs:
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = import inputs.systems;
+      perSystem = { config, self', pkgs, lib, system, ... }: let
+        java = pkgs.jdk17;
+        nativeBuildInputs = with pkgs; [
+          java
+          gradle
+        ];
+        buildInputs = with pkgs; [
+          libGL
+          xorg.libX11
+          xorg.libXext
+          xorg.libXcursor
+          xorg.libXrandr
+          xorg.libXi
+          xorg.libXxf86vm
+          libpulseaudio
+          openal
+          flite
+          udev
+        ];
+      in {
         devShells.default = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            jdk17
-            gradle
-          ];
+          inherit nativeBuildInputs buildInputs;
+          env = {
+            LD_LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+            JAVA_HOME = "${java.home}";
+          };
         };
-      }
-    );
+      };
+    };
 }
+
