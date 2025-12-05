@@ -1,9 +1,6 @@
 package com.benmac.cobblemonrf;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.Minecraft;
-
-
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -17,8 +14,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
-import org.spongepowered.asm.launch.MixinBootstrap;
-import org.spongepowered.asm.mixin.Mixins;
 
 /**
  * CobblemonRF — adds Forge Energy to Cobblemon Healing Machine block entities.
@@ -30,11 +25,6 @@ public class CobblemonRF {
 
     public CobblemonRF() {
         LOGGER.info("COBBLEMONRF: mod constructor ran");
-
-        // Initialize Mixin
-        MixinBootstrap.init();
-        Mixins.addConfiguration("cobblemonrf.mixins.json");
-        LOGGER.info("COBBLEMONRF: Mixin initialized");
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 

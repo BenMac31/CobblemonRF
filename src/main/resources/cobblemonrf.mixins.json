@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "cobblemonrf.refmap.json",
   "mixins": [
+    "HealingMachineBlockEntityMixin"
   ],
   "client": [],
   "server": [],
